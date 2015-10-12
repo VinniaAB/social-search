@@ -6,7 +6,7 @@
  * Time: 14:55
  */
 
-namespace Vinnia\Social\Test;
+namespace Vinnia\SocialSearch\Test;
 
 
 class InstagramSearchTest extends \PHPUnit_Framework_TestCase {

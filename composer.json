@@ -15,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vinnia\\Social\\": "src/"
+            "Vinnia\\SocialSearch\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vinnia\\Social\\Test": "test/"
+            "Vinnia\\SocialSearch\\Test\\": "test/"
         }
     }
 }

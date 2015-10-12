@@ -6,7 +6,7 @@
  * Time: 14:50
  */
 
-namespace Vinnia\Social;
+namespace Vinnia\SocialSearch;
 
 
 interface SearchInterface {

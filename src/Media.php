@@ -6,7 +6,7 @@
  * Time: 14:51
  */
 
-namespace Vinnia\Social;
+namespace Vinnia\SocialSearch;
 
 
 class Media {
