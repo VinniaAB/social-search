@@ -11,6 +11,7 @@ composer install
 ```
 
 ## Testing
+Copy `.env-sample` to `.env-test` and enter a valid instagram client id in INSTAGRAM_CLIENT_ID.
 ```
 vendor/bin/phpunit
 ```
