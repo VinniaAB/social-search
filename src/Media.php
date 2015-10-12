@@ -20,6 +20,7 @@ class Media {
     const SOURCE_FACEBOOK = 'facebook';
     const SOURCE_PERISCOPE = 'periscope';
 
+
     /**
      * @var string
      */
@@ -49,5 +50,25 @@ class Media {
      * @var int
      */
     public $createdAt;
+
+    /**
+     * @return string[]
+     */
+    public static function getValidTypes() {
+        return [self::TYPE_TEXT, self::TYPE_IMAGE, self::TYPE_VIDEO];
+    }
+
+    /**
+     * @param string $type
+     * @return string|null
+     */
+    public static function isTypeValid($type) {
+        foreach ( self::getValidTypes() as $validType ) {
+            if ( $type === $validType ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
