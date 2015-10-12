@@ -15,12 +15,12 @@ interface SearchInterface {
      * @param string $tag
      * @return Media[]
      */
-    public function searchByTag($tag);
+    public function findByTag($tag);
 
     /**
      * @param string $username
      * @return Media[]
      */
-    public function searchByUsername($username);
+    public function findByUsername($username);
 
 }

@@ -31,8 +31,8 @@ class InstagramSearchTest extends \PHPUnit_Framework_TestCase {
         $this->search = new InstagramSearch($insta);
     }
 
-    public function testSearchByTag() {
-        $result = $this->search->searchByTag('swag');
+    public function testFindByTag() {
+        $result = $this->search->findByTag('swag');
 
         $this->assertInstanceOf(Media::class, $result[0]);
     }
@@ -43,8 +43,8 @@ class InstagramSearchTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2009373206, $id);
     }
 
-    public function testSearchByUsername() {
-        $media = $this->search->searchByUsername($this->seolhyun);
+    public function testFindByUsername() {
+        $media = $this->search->findByUsername($this->seolhyun);
 
         $this->assertInstanceOf(Media::class, $media[0]);
     }

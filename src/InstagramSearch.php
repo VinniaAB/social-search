@@ -25,7 +25,7 @@ class InstagramSearch implements SearchInterface {
      * @param string $tag
      * @return Media[]
      */
-    public function searchByTag($tag) {
+    public function findByTag($tag) {
         $result = $this->client->getTagMedia($tag, 20);
 
         $mediaCollection = new Collection($result->data);
@@ -39,7 +39,7 @@ class InstagramSearch implements SearchInterface {
      * @param string $username
      * @return Media[]
      */
-    public function searchByUsername($username) {
+    public function findByUsername($username) {
         $id = $this->getIdByUsername($username);
 
         // no user with the specified username was found
