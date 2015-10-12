@@ -20,7 +20,6 @@ class Media {
     const SOURCE_FACEBOOK = 'facebook';
     const SOURCE_PERISCOPE = 'periscope';
 
-
     /**
      * @var string
      */
@@ -63,12 +62,7 @@ class Media {
      * @return string|null
      */
     public static function isTypeValid($type) {
-        foreach ( self::getValidTypes() as $validType ) {
-            if ( $type === $validType ) {
-                return true;
-            }
-        }
-        return false;
+        return in_array($type, self::getValidTypes(), $strict = true);
     }
 
 }
