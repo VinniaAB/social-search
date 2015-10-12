@@ -1,0 +1,26 @@
+{
+    "name": "vinnia/social-search",
+    "authors": [
+        {
+            "name": "Johan Björk",
+            "email": "johanimon@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vinnia\\Social\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vinnia\\Social\\Test": "test/"
+        }
+    }
+}
