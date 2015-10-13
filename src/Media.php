@@ -58,8 +58,8 @@ class Media {
     }
 
     /**
-     * @param string $type
-     * @return string|null
+     * @param int $type
+     * @return bool
      */
     public static function isTypeValid($type) {
         return in_array($type, self::getValidTypes(), $strict = true);
