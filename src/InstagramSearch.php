@@ -98,23 +98,23 @@ class InstagramSearch implements SearchInterface {
      */
     protected function responseItemToMedia($item) {
 
-        $media = new Media();
-        $media->source = Media::SOURCE_INSTAGRAM;
-        $media->username = $item->user->username;
-        $media->createdAt = (int) $item->created_time;
+        $media = null;
 
         switch ($item->type) {
             case 'image':
-                $media->type = Media::TYPE_IMAGE;
+                $media = new Media(Media::SOURCE_INSTAGRAM, Media::TYPE_IMAGE);
                 $media->data = $item->images->standard_resolution->url;
                 break;
             case 'video':
-                $media->type = Media::TYPE_VIDEO;
+                $media = new Media(Media::SOURCE_INSTAGRAM, Media::TYPE_VIDEO);
                 $media->data = $item->videos->standard_resolution->url;
                 break;
             default:
                 throw new \RuntimeException(sprintf('Unknown media type %s', $item->type));
         }
+
+        $media->username = $item->user->username;
+        $media->createdAt = (int) $item->created_time;
 
         return $media;
     }

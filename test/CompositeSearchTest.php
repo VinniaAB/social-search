@@ -65,9 +65,9 @@ class CompositeSearchTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {
         parent::setUp();
 
-        $m1 = new Media();
+        $m1 = new Media(Media::SOURCE_INSTAGRAM, Media::TYPE_IMAGE);
         $m1->createdAt = 1000;
-        $m2 = new Media();
+        $m2 = new Media(Media::SOURCE_TWITTER, Media::TYPE_TEXT);
         $m2->createdAt = 2000;
 
         $this->m1 = $m1;

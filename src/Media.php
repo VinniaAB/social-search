@@ -23,12 +23,12 @@ class Media {
     /**
      * @var int
      */
-    public $source;
+    private $source;
 
     /**
      * @var int
      */
-    public $type;
+    private $type;
 
     /**
      * @var string
@@ -51,10 +51,43 @@ class Media {
     public $createdAt;
 
     /**
-     * @return string[]
+     * @param int $source
+     * @param int $type
+     */
+    function __construct($source, $type) {
+        if ( !self::isSourceValid($source) || !self::isTypeValid($type) ) {
+            throw new \InvalidArgumentException('Invalid source or type');
+        }
+
+        $this->source = $source;
+        $this->type = $type;
+    }
+
+    public function getSource() {
+        return $this->source;
+    }
+
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * @return int[]
      */
     public static function getValidTypes() {
         return [self::TYPE_TEXT, self::TYPE_IMAGE, self::TYPE_VIDEO];
+    }
+
+    /**
+     * @return int[]
+     */
+    public static function getValidSources() {
+        return [
+            self::SOURCE_INSTAGRAM,
+            self::SOURCE_TWITTER,
+            self::SOURCE_FACEBOOK,
+            self::SOURCE_PERISCOPE
+        ];
     }
 
     /**
@@ -63,6 +96,14 @@ class Media {
      */
     public static function isTypeValid($type) {
         return in_array($type, self::getValidTypes(), $strict = true);
+    }
+
+    /**
+     * @param int $source
+     * @return bool
+     */
+    public static function isSourceValid($source) {
+        return in_array($source, self::getValidSources(), $strict = true);
     }
 
 }
