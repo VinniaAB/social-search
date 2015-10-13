@@ -8,17 +8,29 @@
 
 namespace Vinnia\SocialSearch;
 
-use MetzWeb\Instagram\Instagram;
+use GuzzleHttp\ClientInterface;
 
 class InstagramSearch implements SearchInterface {
 
-    /**
-     * @var Instagram
-     */
-    private $client;
+    const API_URL = 'https://api.instagram.com/v1';
 
-    function __construct(Instagram $client) {
-        $this->client = $client;
+    /**
+     * @var ClientInterface
+     */
+    private $httpClient;
+
+    /**
+     * @var string
+     */
+    private $clientId;
+
+    /**
+     * @param ClientInterface $httpClient
+     * @param string $clientId Instagram app client id
+     */
+    function __construct(ClientInterface $httpClient, $clientId) {
+        $this->httpClient = $httpClient;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -26,7 +38,7 @@ class InstagramSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByTag($tag) {
-        $result = $this->client->getTagMedia($tag, 20);
+        $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent");
 
         $mediaCollection = new Collection($result->data);
 
@@ -40,14 +52,16 @@ class InstagramSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByUsername($username) {
-        $id = $this->getIdByUsername($username);
+        $id = $this->getIdByUsername('GET', $username);
 
         // no user with the specified username was found
         if ( $id === null ) {
             return [];
         }
 
-        $result = $this->client->getUserMedia($id, 100);
+        $result = $this->sendRequest('GET', "/users/{$id}/media/recent", [
+            'query' => ['count' => 100]
+        ]);
 
         $mediaCollection = new Collection($result->data);
 
@@ -61,7 +75,12 @@ class InstagramSearch implements SearchInterface {
      * @return string|null
      */
     public function getIdByUsername($username) {
-        $result = $this->client->searchUser($username, 1);
+        $result = $this->sendRequest('GET', '/users/search', [
+            'query' => [
+                'q' => $username,
+                'count' => 1
+            ]
+        ]);
 
         // no user with the specified username was found
         if ( count($result->data) === 0 ) {
@@ -96,6 +115,18 @@ class InstagramSearch implements SearchInterface {
         }
 
         return $media;
+    }
+
+    /**
+     * @param string $method
+     * @param string $endpoint
+     * @param array $options
+     * @return \stdClass
+     */
+    protected function sendRequest($method, $endpoint, array $options = []) {
+        $opts = array_merge_recursive(['query' => ['client_id' => $this->clientId]], $options);
+        $res = $this->httpClient->request($method, self::API_URL . $endpoint, $opts);
+        return json_decode((string) $res->getBody());
     }
 
 }
