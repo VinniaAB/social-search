@@ -46,6 +46,9 @@ class TwitterSearch implements SearchInterface {
         $this->secret = $secret;
     }
 
+    /**
+     * Make sure we have an access token before executing requests
+     */
     protected function assertHasAccessToken() {
         if ( !$this->accessToken ) {
             $res = $this->getAccessToken();
@@ -55,6 +58,7 @@ class TwitterSearch implements SearchInterface {
 
     /**
      * Get an access token from the Twitter OAuth service
+     * Method designed from specification at https://dev.twitter.com/oauth/application-only
      * @return \stdClass
      */
     protected function getAccessToken() {
