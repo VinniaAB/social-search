@@ -80,8 +80,6 @@ class TwitterSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByTag($tag) {
-        $this->assertHasAccessToken();
-
         return $this->searchTweets('#' . $tag);
     }
 
@@ -90,8 +88,6 @@ class TwitterSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByUsername($username) {
-        $this->assertHasAccessToken();
-
         return $this->searchTweets('from:' . $username);
     }
 
@@ -139,6 +135,8 @@ class TwitterSearch implements SearchInterface {
      * @return \stdClass
      */
     protected function sendRequest($method, $endpoint, array $options = []) {
+        $this->assertHasAccessToken();
+
         $opts = array_merge_recursive([
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->accessToken
