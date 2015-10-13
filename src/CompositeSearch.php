@@ -24,6 +24,16 @@ class CompositeSearch implements SearchInterface {
     }
 
     /**
+     * Sort the objects with the latest first
+     * @param Media[] $media
+     */
+    protected function sortMedia(array &$media) {
+        usort($media, function($a, $b) {
+            return $a->createdAt < $b->createdAt;
+        });
+    }
+
+    /**
      * @param string $tag
      * @return Media[]
      */
@@ -33,6 +43,8 @@ class CompositeSearch implements SearchInterface {
         foreach ( $this->delegates as $delegate ) {
             $data = array_merge($data, $delegate->findByTag($tag));
         }
+
+        $this->sortMedia($data);
 
         return $data;
     }
@@ -47,6 +59,8 @@ class CompositeSearch implements SearchInterface {
         foreach ( $this->delegates as $delegate ) {
             $data = array_merge($data, $delegate->findByUsername($username));
         }
+
+        $this->sortMedia($data);
 
         return $data;
     }
