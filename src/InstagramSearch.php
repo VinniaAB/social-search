@@ -38,7 +38,9 @@ class InstagramSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByTag($tag) {
-        $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent");
+        $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent", [
+            'query' => ['count' => 100]
+        ]);
 
         $mediaCollection = new Collection($result->data);
 

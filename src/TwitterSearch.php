@@ -101,7 +101,11 @@ class TwitterSearch implements SearchInterface {
      */
     protected function searchTweets($query) {
         $res = $this->sendRequest('GET', '/search/tweets.json', [
-            'query' => ['q' => $query, 'result_type' => 'recent']
+            'query' => [
+                'q' => $query,
+                'result_type' => 'recent',
+                'count' => 100
+            ]
         ]);
 
         $statuses = $res->statuses;
