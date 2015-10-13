@@ -11,22 +11,22 @@ namespace Vinnia\SocialSearch;
 
 class Media {
 
-    const TYPE_TEXT = 'text';
-    const TYPE_IMAGE = 'image';
-    const TYPE_VIDEO = 'video';
+    const TYPE_TEXT = 0;
+    const TYPE_IMAGE = 1;
+    const TYPE_VIDEO = 2;
 
-    const SOURCE_INSTAGRAM = 'instagram';
-    const SOURCE_TWITTER = 'twitter';
-    const SOURCE_FACEBOOK = 'facebook';
-    const SOURCE_PERISCOPE = 'periscope';
+    const SOURCE_INSTAGRAM = 0;
+    const SOURCE_TWITTER = 1;
+    const SOURCE_FACEBOOK = 2;
+    const SOURCE_PERISCOPE = 3;
 
     /**
-     * @var string
+     * @var int
      */
     public $source;
 
     /**
-     * @var string
+     * @var int
      */
     public $type;
 
