@@ -80,7 +80,7 @@ class TwitterSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByTag($tag) {
-        return $this->searchTweets('#' . $tag);
+        return $this->searchTweets('#' . $tag . ' exclude:retweets');
     }
 
     /**
@@ -88,7 +88,7 @@ class TwitterSearch implements SearchInterface {
      * @return Media[]
      */
     public function findByUsername($username) {
-        return $this->searchTweets('from:' . $username);
+        return $this->searchTweets('from:' . $username . ' exclude:retweets');
     }
 
     /**
