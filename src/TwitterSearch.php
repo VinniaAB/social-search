@@ -8,77 +8,25 @@
 
 namespace Vinnia\SocialSearch;
 
-use GuzzleHttp\ClientInterface;
 
 class TwitterSearch implements SearchInterface {
 
     const API_URL = 'https://api.twitter.com/1.1';
 
     /**
-     * @var ClientInterface
+     * @var TwitterClient
      */
-    private $httpClient;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @var string
-     */
-    private $secret;
-
-    /**
-     * @var string
-     */
-    private $accessToken;
+    private $client;
 
     /**
      * @var int
      */
     private $resultCount;
 
-    /**
-     * @param ClientInterface $httpClient
-     * @param string $key
-     * @param string $secret
-     * @param int $resultCount
-     */
-    function __construct(ClientInterface $httpClient, $key, $secret, $resultCount = 25) {
-        $this->httpClient = $httpClient;
-        $this->key = $key;
-        $this->secret = $secret;
+
+    function __construct(TwitterClient $client, $resultCount = 25) {
+        $this->client = $client;
         $this->resultCount = $resultCount;
-    }
-
-    /**
-     * Make sure we have an access token before executing requests
-     */
-    protected function assertHasAccessToken() {
-        if ( !$this->accessToken ) {
-            $res = $this->getAccessToken();
-            $this->accessToken = $res->access_token;
-        }
-    }
-
-    /**
-     * Get an access token from the Twitter OAuth service
-     * Method designed from specification at https://dev.twitter.com/oauth/application-only
-     * @return \stdClass
-     */
-    protected function getAccessToken() {
-        $creds = rawurlencode($this->key) . ':' . rawurlencode($this->secret);
-
-        $res = $this->httpClient->request('POST', 'https://api.twitter.com/oauth2/token', [
-            'headers' => [
-                'Authorization' => 'Basic ' . base64_encode($creds),
-                'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8'
-            ],
-            'body' => 'grant_type=client_credentials'
-        ]);
-
-        return json_decode((string) $res->getBody());
     }
 
     /**
@@ -102,20 +50,16 @@ class TwitterSearch implements SearchInterface {
      * @return Media[]
      */
     protected function searchTweets($query) {
-        $res = $this->sendRequest('GET', '/search/tweets.json', [
-            'query' => [
-                'q' => $query,
-                'result_type' => 'recent',
-                'count' => $this->resultCount
-            ]
-        ]);
+        $params = [
+            'q' => $query,
+            'result_type' => 'recent',
+            'count' => $this->resultCount
+        ];
 
+        $res = $this->client->searchTweets($params);
         $statuses = $res->statuses;
-        $statusCollection = new Collection($statuses);
 
-        return $statusCollection->map(function($item) {
-            return $this->tweetToMedia($item);
-        })->all();
+        return array_map([$this, 'tweetToMedia'], $statuses);
     }
 
     /**
@@ -141,23 +85,4 @@ class TwitterSearch implements SearchInterface {
         return $media;
     }
 
-    /**
-     * @param string $method
-     * @param string $endpoint
-     * @param array $options
-     * @return \stdClass
-     */
-    protected function sendRequest($method, $endpoint, array $options = []) {
-        $this->assertHasAccessToken();
-
-        $opts = array_merge_recursive([
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->accessToken
-            ]
-        ], $options);
-
-        $res = $this->httpClient->request($method, self::API_URL . $endpoint, $opts);
-
-        return json_decode((string) $res->getBody());
-    }
 }

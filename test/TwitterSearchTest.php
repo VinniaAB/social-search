@@ -10,6 +10,7 @@ namespace Vinnia\SocialSearch\Test;
 
 use GuzzleHttp\Client;
 use Vinnia\SocialSearch\Media;
+use Vinnia\SocialSearch\TwitterClient;
 use Vinnia\SocialSearch\TwitterSearch;
 
 class TwitterSearchTest extends \PHPUnit_Framework_TestCase {
@@ -22,10 +23,11 @@ class TwitterSearchTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {
         parent::setUp();
 
-        $guzzle = new Client();
         $key = $_ENV['TWITTER_KEY'];
         $secret = $_ENV['TWITTER_SECRET'];
-        $this->search = new TwitterSearch($guzzle, $key, $secret);
+        $guzzle = new Client();
+        $twitterClient = new TwitterClient($guzzle, $key, $secret);
+        $this->search = new TwitterSearch($twitterClient);
     }
 
     public function testFindByUsername() {

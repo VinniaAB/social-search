@@ -24,8 +24,10 @@ class SearchFactory {
             'timeout' => 5
         ]);
 
+        $twitterClient = new TwitterClient($guzzle, $twitterAppKey, $twitterAppSecret);
+
         $insta = new InstagramSearch($guzzle, $instagramClientId);
-        $twitter = new TwitterSearch($guzzle, $twitterAppKey, $twitterAppSecret);
+        $twitter = new TwitterSearch($twitterClient);
 
         return new CompositeSearch([$insta, $twitter]);
     }
