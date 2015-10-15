@@ -9,12 +9,10 @@
 namespace Vinnia\SocialSearch;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Request;
 
 class TwitterSearch implements SearchInterface {
 
     const API_URL = 'https://api.twitter.com/1.1';
-    const REQUEST_TIMEOUT = 5;
 
     /**
      * @var ClientInterface
@@ -37,14 +35,21 @@ class TwitterSearch implements SearchInterface {
     private $accessToken;
 
     /**
+     * @var int
+     */
+    private $resultCount;
+
+    /**
      * @param ClientInterface $httpClient
      * @param string $key
      * @param string $secret
+     * @param int $resultCount
      */
-    function __construct(ClientInterface $httpClient, $key, $secret) {
+    function __construct(ClientInterface $httpClient, $key, $secret, $resultCount = 25) {
         $this->httpClient = $httpClient;
         $this->key = $key;
         $this->secret = $secret;
+        $this->resultCount = $resultCount;
     }
 
     /**
@@ -70,8 +75,7 @@ class TwitterSearch implements SearchInterface {
                 'Authorization' => 'Basic ' . base64_encode($creds),
                 'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8'
             ],
-            'body' => 'grant_type=client_credentials',
-            'timeout' => self::REQUEST_TIMEOUT
+            'body' => 'grant_type=client_credentials'
         ]);
 
         return json_decode((string) $res->getBody());
@@ -102,9 +106,8 @@ class TwitterSearch implements SearchInterface {
             'query' => [
                 'q' => $query,
                 'result_type' => 'recent',
-                'count' => 25
-            ],
-            'timeout' => self::REQUEST_TIMEOUT
+                'count' => $this->resultCount
+            ]
         ]);
 
         $statuses = $res->statuses;

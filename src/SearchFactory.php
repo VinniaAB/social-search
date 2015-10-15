@@ -20,7 +20,9 @@ class SearchFactory {
      * @return SearchInterface
      */
     public static function build($instagramClientId, $twitterAppKey, $twitterAppSecret) {
-        $guzzle = new Client();
+        $guzzle = new Client([
+            'timeout' => 5
+        ]);
 
         $insta = new InstagramSearch($guzzle, $instagramClientId);
         $twitter = new TwitterSearch($guzzle, $twitterAppKey, $twitterAppSecret);

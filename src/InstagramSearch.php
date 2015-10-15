@@ -13,7 +13,6 @@ use GuzzleHttp\ClientInterface;
 class InstagramSearch implements SearchInterface {
 
     const API_URL = 'https://api.instagram.com/v1';
-    const REQUEST_TIMEOUT = 5;
 
     /**
      * @var ClientInterface
@@ -26,12 +25,19 @@ class InstagramSearch implements SearchInterface {
     private $clientId;
 
     /**
+     * @var int
+     */
+    private $resultCount;
+
+    /**
      * @param ClientInterface $httpClient
      * @param string $clientId Instagram app client id
+     * @param int $resultCount
      */
-    function __construct(ClientInterface $httpClient, $clientId) {
+    function __construct(ClientInterface $httpClient, $clientId, $resultCount = 25) {
         $this->httpClient = $httpClient;
         $this->clientId = $clientId;
+        $this->resultCount = $resultCount;
     }
 
     /**
@@ -40,8 +46,7 @@ class InstagramSearch implements SearchInterface {
      */
     public function findByTag($tag) {
         $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent", [
-            'query' => ['count' => 25],
-            'timeout' => self::REQUEST_TIMEOUT
+            'query' => ['count' => $this->resultCount]
         ]);
 
         $mediaCollection = new Collection($result->data);
@@ -64,8 +69,7 @@ class InstagramSearch implements SearchInterface {
         }
 
         $result = $this->sendRequest('GET', "/users/{$id}/media/recent", [
-            'query' => ['count' => 25],
-            'timeout' => self::REQUEST_TIMEOUT
+            'query' => ['count' => $this->resultCount]
         ]);
 
         $mediaCollection = new Collection($result->data);
@@ -84,8 +88,7 @@ class InstagramSearch implements SearchInterface {
             'query' => [
                 'q' => $username,
                 'count' => 1,
-            ],
-            'timeout' => self::REQUEST_TIMEOUT
+            ]
         ]);
 
         // no user with the specified username was found
