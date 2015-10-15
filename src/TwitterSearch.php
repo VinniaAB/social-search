@@ -118,10 +118,19 @@ class TwitterSearch implements SearchInterface {
      * @return Media
      */
     protected function tweetToMedia($tweet) {
-        $media = new Media(Media::SOURCE_TWITTER, Media::TYPE_TEXT);
+
+        if ( isset($tweet->entities->media) && $tweet->entities->media[0]->type === 'photo' ) {
+            $media = new Media(Media::SOURCE_TWITTER, Media::TYPE_IMAGE);
+            $media->data = $tweet->entities->media[0]->media_url_https;
+            $media->caption = $tweet->text;
+        }
+        else {
+            $media = new Media(Media::SOURCE_TWITTER, Media::TYPE_TEXT);
+            $media->data = $tweet->text;
+        }
+
         $media->username = $tweet->user->screen_name;
         $media->createdAt = strtotime($tweet->created_at);
-        $media->data = $tweet->text;
 
         return $media;
     }
