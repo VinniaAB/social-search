@@ -100,7 +100,7 @@ class TwitterSearch implements SearchInterface {
             'query' => [
                 'q' => $query,
                 'result_type' => 'recent',
-                'count' => 100
+                'count' => 25
             ]
         ]);
 

@@ -39,7 +39,7 @@ class InstagramSearch implements SearchInterface {
      */
     public function findByTag($tag) {
         $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent", [
-            'query' => ['count' => 100]
+            'query' => ['count' => 25]
         ]);
 
         $mediaCollection = new Collection($result->data);
@@ -62,7 +62,7 @@ class InstagramSearch implements SearchInterface {
         }
 
         $result = $this->sendRequest('GET', "/users/{$id}/media/recent", [
-            'query' => ['count' => 100]
+            'query' => ['count' => 25]
         ]);
 
         $mediaCollection = new Collection($result->data);
