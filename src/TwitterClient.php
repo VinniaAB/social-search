@@ -6,7 +6,7 @@
  * Time: 18:22
  */
 
-namespace Vinnia\SocialSearch;
+namespace Vinnia\SocialTools;
 
 use GuzzleHttp\ClientInterface;
 

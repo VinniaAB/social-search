@@ -6,11 +6,11 @@
  * Time: 14:34
  */
 
-namespace Vinnia\SocialSearch\Test;
+namespace Vinnia\SocialTools\Test;
 
-use Vinnia\SocialSearch\CompositeSearch;
-use Vinnia\SocialSearch\Media;
-use Vinnia\SocialSearch\SearchInterface;
+use Vinnia\SocialTools\CompositeSearch;
+use Vinnia\SocialTools\Media;
+use Vinnia\SocialTools\SearchInterface;
 
 class CompositeMockSearch implements SearchInterface {
 

@@ -6,9 +6,9 @@
  * Time: 18:14
  */
 
-namespace Vinnia\SocialSearch\Test;
+namespace Vinnia\SocialTools\Test;
 
-use Vinnia\SocialSearch\Media;
+use Vinnia\SocialTools\Media;
 
 class MediaTest extends \PHPUnit_Framework_TestCase {
 

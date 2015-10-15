@@ -6,12 +6,12 @@
  * Time: 18:22
  */
 
-namespace Vinnia\SocialSearch\Test;
+namespace Vinnia\SocialTools\Test;
 
 use GuzzleHttp\Client;
-use Vinnia\SocialSearch\Media;
-use Vinnia\SocialSearch\TwitterClient;
-use Vinnia\SocialSearch\TwitterSearch;
+use Vinnia\SocialTools\Media;
+use Vinnia\SocialTools\TwitterClient;
+use Vinnia\SocialTools\TwitterSearch;
 
 class TwitterSearchTest extends \PHPUnit_Framework_TestCase {
 

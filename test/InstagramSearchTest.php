@@ -6,12 +6,12 @@
  * Time: 14:55
  */
 
-namespace Vinnia\SocialSearch\Test;
+namespace Vinnia\SocialTools\Test;
 
 use GuzzleHttp\Client;
-use Vinnia\SocialSearch\InstagramClient;
-use Vinnia\SocialSearch\Media;
-use Vinnia\SocialSearch\InstagramSearch;
+use Vinnia\SocialTools\InstagramClient;
+use Vinnia\SocialTools\Media;
+use Vinnia\SocialTools\InstagramSearch;
 
 class InstagramSearchTest extends \PHPUnit_Framework_TestCase {
 

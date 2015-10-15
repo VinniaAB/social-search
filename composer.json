@@ -1,5 +1,5 @@
 {
-    "name": "vinnia/social-search",
+    "name": "vinnia/social-tools",
     "authors": [
         {
             "name": "Johan Björk",
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vinnia\\SocialSearch\\": "src/"
+            "Vinnia\\SocialTools\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vinnia\\SocialSearch\\Test\\": "test/"
+            "Vinnia\\SocialTools\\Test\\": "test/"
         }
     }
 }

@@ -6,7 +6,7 @@
  * Time: 17:40
  */
 
-namespace Vinnia\SocialSearch;
+namespace Vinnia\SocialTools;
 
 class Collection {
 

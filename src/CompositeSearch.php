@@ -6,7 +6,7 @@
  * Time: 18:33
  */
 
-namespace Vinnia\SocialSearch;
+namespace Vinnia\SocialTools;
 
 
 class CompositeSearch implements SearchInterface {
