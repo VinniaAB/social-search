@@ -12,8 +12,6 @@ use GuzzleHttp\ClientInterface;
 
 class InstagramSearch implements SearchInterface {
 
-    const API_URL = 'https://api.instagram.com/v1';
-
     /**
      * @var InstagramClient
      */
