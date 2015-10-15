@@ -13,6 +13,7 @@ use GuzzleHttp\ClientInterface;
 class InstagramSearch implements SearchInterface {
 
     const API_URL = 'https://api.instagram.com/v1';
+    const REQUEST_TIMEOUT = 5;
 
     /**
      * @var ClientInterface
@@ -39,7 +40,8 @@ class InstagramSearch implements SearchInterface {
      */
     public function findByTag($tag) {
         $result = $this->sendRequest('GET', "/tags/{$tag}/media/recent", [
-            'query' => ['count' => 25]
+            'query' => ['count' => 25],
+            'timeout' => self::REQUEST_TIMEOUT
         ]);
 
         $mediaCollection = new Collection($result->data);
@@ -62,7 +64,8 @@ class InstagramSearch implements SearchInterface {
         }
 
         $result = $this->sendRequest('GET', "/users/{$id}/media/recent", [
-            'query' => ['count' => 25]
+            'query' => ['count' => 25],
+            'timeout' => self::REQUEST_TIMEOUT
         ]);
 
         $mediaCollection = new Collection($result->data);
@@ -80,8 +83,9 @@ class InstagramSearch implements SearchInterface {
         $result = $this->sendRequest('GET', '/users/search', [
             'query' => [
                 'q' => $username,
-                'count' => 1
-            ]
+                'count' => 1,
+            ],
+            'timeout' => self::REQUEST_TIMEOUT
         ]);
 
         // no user with the specified username was found

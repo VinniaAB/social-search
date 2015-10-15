@@ -41,7 +41,13 @@ class CompositeSearch implements SearchInterface {
         $data = [];
 
         foreach ( $this->delegates as $delegate ) {
-            $data = array_merge($data, $delegate->findByTag($tag));
+            try {
+                $data = array_merge($data, $delegate->findByTag($tag));
+            }
+            catch ( \Exception $e ) {
+                error_log((string) $e, E_ERROR);
+            }
+
         }
 
         $this->sortMedia($data);
@@ -57,7 +63,12 @@ class CompositeSearch implements SearchInterface {
         $data = [];
 
         foreach ( $this->delegates as $delegate ) {
-            $data = array_merge($data, $delegate->findByUsername($username));
+            try {
+                $data = array_merge($data, $delegate->findByUsername($username));
+            }
+            catch ( \Exception $e ) {
+                error_log((string) $e, E_ERROR);
+            }
         }
 
         $this->sortMedia($data);

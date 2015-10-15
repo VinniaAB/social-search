@@ -14,6 +14,7 @@ use GuzzleHttp\Psr7\Request;
 class TwitterSearch implements SearchInterface {
 
     const API_URL = 'https://api.twitter.com/1.1';
+    const REQUEST_TIMEOUT = 5;
 
     /**
      * @var ClientInterface
@@ -69,7 +70,8 @@ class TwitterSearch implements SearchInterface {
                 'Authorization' => 'Basic ' . base64_encode($creds),
                 'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8'
             ],
-            'body' => 'grant_type=client_credentials'
+            'body' => 'grant_type=client_credentials',
+            'timeout' => self::REQUEST_TIMEOUT
         ]);
 
         return json_decode((string) $res->getBody());
@@ -101,7 +103,8 @@ class TwitterSearch implements SearchInterface {
                 'q' => $query,
                 'result_type' => 'recent',
                 'count' => 25
-            ]
+            ],
+            'timeout' => self::REQUEST_TIMEOUT
         ]);
 
         $statuses = $res->statuses;
