@@ -33,18 +33,32 @@ class InstagramClient {
         $this->clientId = $clientId;
     }
 
+    /**
+     * @param string $tag
+     * @param string[] $params
+     * @return \stdClass
+     */
     public function tagsMediaRecent($tag, array $params = []) {
         return $this->sendRequest('GET', "/tags/{$tag}/media/recent", [
             'query' => $params
         ]);
     }
 
+    /**
+     * @param string $id
+     * @param string[] $params
+     * @return \stdClass
+     */
     public function usersMediaRecent($id, array $params = []) {
         return $this->sendRequest('GET', "/users/{$id}/media/recent", [
             'query' => $params
         ]);
     }
 
+    /**
+     * @param string[] $params
+     * @return \stdClass
+     */
     public function usersSearch(array $params = []) {
         return $this->sendRequest('GET', '/users/search', [
             'query' => $params
