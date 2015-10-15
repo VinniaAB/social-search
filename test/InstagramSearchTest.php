@@ -9,6 +9,7 @@
 namespace Vinnia\SocialSearch\Test;
 
 use GuzzleHttp\Client;
+use Vinnia\SocialSearch\InstagramClient;
 use Vinnia\SocialSearch\Media;
 use Vinnia\SocialSearch\InstagramSearch;
 
@@ -27,9 +28,9 @@ class InstagramSearchTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {
         parent::setUp();
 
-        //$insta = new Instagram($_ENV['INSTAGRAM_CLIENT_ID']);
         $guzzle = new Client();
-        $this->search = new InstagramSearch($guzzle, $_ENV['INSTAGRAM_CLIENT_ID']);
+        $instagramClient = new InstagramClient($guzzle, $_ENV['INSTAGRAM_CLIENT_ID']);
+        $this->search = new InstagramSearch($instagramClient);
     }
 
     public function testFindByTag() {
