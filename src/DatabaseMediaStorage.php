@@ -92,15 +92,15 @@ class DatabaseMediaStorage implements MediaStorageInterface {
 
         $sql = <<<EOD
 insert into vss_media(
-  "source",
-  "original_id",
-  "text",
-  "images",
-  "videos",
-  "lat",
-  "long",
-  "username",
-  "created_at"
+  source,
+  original_id,
+  text,
+  images,
+  videos,
+  lat,
+  long,
+  username,
+  created_at
 ) values (
   :source,
   :originalId,
