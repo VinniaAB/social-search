@@ -164,15 +164,66 @@ EOD;
      * @return Media[]
      */
     public function query(MediaStorageQuery $query) {
-        $sql = 'select * from vss_media';
-        $data = $this->db->queryAll($sql);
+        $where = [];
+        $join = [];
+        $paramValues = [];
+        if ( $query->since ) {
+            $where[] = 'vm.created_at > :since';
+            $paramValues[':since'] = $query->since;
+        }
+
+        if ( count($query->tags) !== 0 ) {
+
+            $i = 0;
+            $params = [];
+            foreach ( $query->tags as $tag ) {
+                $key = ':qp' . $i;
+                $params[] = $key;
+                $paramValues[$key] = $tag;
+                $i++;
+            }
+
+            $paramString = implode(',', $params);
+
+            $join[] = <<<EOD
+inner join vss_tag vt
+on vm.vss_media_id = vt.vss_media_id
+and vt.name in ($paramString)
+EOD;
+        }
+
+        $joins = implode(' ', $join);
+        $wheres = implode(' and ', $where);
+
+        if ( $wheres !== '' ) {
+            $wheres = 'where ' . $wheres;
+        }
+
+        $sql = <<<EOD
+select *
+from vss_media vm
+inner join (
+    select vm.vss_media_id
+    from vss_media vm
+    {$joins}
+    {$wheres}
+    group by vm.vss_media_id
+) t1
+on t1.vss_media_id = vm.vss_media_id
+order by vm.created_at asc
+EOD;
+
+        $data = $this->db->queryAll($sql, $paramValues);
 
         /* @var Media[] $media */
         $media = array_map([$this, 'toMedia'], $data);
-        $tags = $this->getTags(array_map(function($it) { return $it->id; }, $media));
 
-        foreach ( $media as $item ) {
-            $item->tags = $tags[$item->id];
+        if ( count($media) !== 0 ) {
+            $tags = $this->getTags(array_map(function($it) { return $it->id; }, $media));
+
+            foreach ( $media as $item ) {
+                $item->tags = $tags[$item->id];
+            }
         }
 
         return $media;
