@@ -13,9 +13,13 @@ use Vinnia\SocialTools\DatabaseMediaStorage;
 use Vinnia\SocialTools\Media;
 use Vinnia\SocialTools\MediaStorageQuery;
 use Vinnia\SocialTools\PDODatabase;
+use PDO;
 
 class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
 
+    /**
+     * @var PDODatabase
+     */
     public $db;
 
     /**
@@ -23,22 +27,29 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
      */
     public $store;
 
+    /**
+     * @var Media
+     */
+    public $item;
+
     public function setUp() {
         parent::setUp();
 
         $dsn = $_ENV['DB_DSN'];
         $user = $_ENV['DB_USERNAME'];
         $pwd = $_ENV['DB_PASSWORD'];
-        $pdo = new \PDO($dsn, $user, $pwd);
+        $pdo = new PDO($dsn, $user, $pwd, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]);
 
         $this->db = new PDODatabase($pdo);
 
         $this->db->execute('delete from vss_media');
 
         $this->store = new DatabaseMediaStorage($this->db);
-    }
 
-    public function testInsertQuery() {
         $m = new Media(Media::SOURCE_INSTAGRAM);
         $m->originalId = '10000';
         $m->text = 'swag';
@@ -50,7 +61,11 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $m->createdAt = 100;
         $m->tags = ['swag', 'yolo'];
 
-        $this->store->insert([$m]);
+        $this->item = $m;
+    }
+
+    public function testInsertQuery() {
+        $this->store->insert([$this->item]);
 
         $all = $this->store->query(new MediaStorageQuery());
 
@@ -59,15 +74,22 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $m1 = $all[0];
 
         $this->assertEquals(Media::SOURCE_INSTAGRAM, $m1->getSource());
-        $this->assertEquals($m->originalId, $m1->originalId);
-        $this->assertEquals($m->text, $m1->text);
-        $this->assertEquals($m->images, $m1->images);
-        $this->assertEquals($m->videos, $m1->videos);
-        $this->assertEquals($m->lat, $m1->lat);
-        $this->assertEquals($m->long, $m1->long);
-        $this->assertEquals($m->username, $m1->username);
-        $this->assertEquals($m->createdAt, $m1->createdAt);
-        $this->assertEquals($m->tags, $m1->tags);
+        $this->assertEquals($this->item->originalId, $m1->originalId);
+        $this->assertEquals($this->item->text, $m1->text);
+        $this->assertEquals($this->item->images, $m1->images);
+        $this->assertEquals($this->item->videos, $m1->videos);
+        $this->assertEquals($this->item->lat, $m1->lat);
+        $this->assertEquals($this->item->long, $m1->long);
+        $this->assertEquals($this->item->username, $m1->username);
+        $this->assertEquals($this->item->createdAt, $m1->createdAt);
+        $this->assertEquals($this->item->tags, $m1->tags);
+    }
+
+    public function testInsertAlreadyExisting() {
+        $qty = $this->store->insert([$this->item]);
+        $this->assertEquals(1, $qty);
+        $qty = $this->store->insert([$this->item]);
+        $this->assertEquals(0, $qty);
     }
 
 }
