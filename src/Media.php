@@ -24,7 +24,7 @@ class Media {
     /**
      * @var int
      */
-    private $source;
+    public $source;
 
     /**
      * The original id of this item from the source
