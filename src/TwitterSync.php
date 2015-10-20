@@ -63,7 +63,7 @@ class TwitterSync implements MediaSyncInterface {
     }
 
     /**
-     * @param string[] $tag tags to sync, not prefixed with #. ex: ['cars', 'boats']
+     * @param string $tag tag to sync, not prefixed with #. ex: ['cars', 'boats']
      * @param int $since unix timestamp to start from
      * @param MediaStorageInterface $store storage to sync to
      * @return int number of synced items
@@ -84,6 +84,7 @@ class TwitterSync implements MediaSyncInterface {
 
             $data = $this->client->searchTweets($query);
             $medias = array_map([$this, 'toMedia'], $data->statuses);
+            $medias = array_filter($medias, function($it) use ($since) { return $it->createdAt > $since; });
             $nextMin = $data->search_metadata->max_id;
             $store->insert($medias);
             $qty += count($medias);
