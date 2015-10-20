@@ -152,9 +152,7 @@ EOD;
 
                 $inserts++;
             }
-            catch ( \Exception $e ) {
-                var_dump($e);
-            }
+            catch ( \Exception $e ) {}
 
         }
 

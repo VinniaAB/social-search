@@ -29,7 +29,7 @@ class TwitterSyncTest extends AbstractSyncTest {
      */
     public function queryProvider() {
         return [
-            ['schwarzenegger', strtotime('yesterday 00:00:00')]
+            ['schwarzenegger', strtotime('yesterday 12:00:00')]
         ];
     }
 

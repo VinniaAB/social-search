@@ -56,6 +56,8 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
             $this->assertTrue(in_array($tag, $t));
             $this->assertTrue($item->createdAt >= $since);
         }
+
+        var_dump(count($items));
     }
 
 }
