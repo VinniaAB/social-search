@@ -63,15 +63,14 @@ class TwitterSync implements MediaSyncInterface {
     }
 
     /**
-     * @param string[] $tags tags to sync, not prefixed with #. ex: ['cars', 'boats']
+     * @param string[] $tag tags to sync, not prefixed with #. ex: ['cars', 'boats']
      * @param int $since unix timestamp to start from
      * @param MediaStorageInterface $store storage to sync to
      * @return int number of synced items
      */
-    public function run(array $tags, $since, MediaStorageInterface $store) {
-        $tags = array_map(function($tag) { return '#' . $tag; }, $tags);
+    public function run($tag, $since, MediaStorageInterface $store) {
         $query = [
-            'q' => implode(' OR ', $tags) . ' since:' . date('Y-m-d', $since),
+            'q' => '#' . $tag . ' since:' . date('Y-m-d', $since),
             'count' => 100
         ];
 

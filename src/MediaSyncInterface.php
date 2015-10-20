@@ -12,11 +12,11 @@ namespace Vinnia\SocialTools;
 interface MediaSyncInterface {
 
     /**
-     * @param string[] $tags tags to sync
+     * @param string $tag
      * @param int $since unix timestamp to start from
      * @param MediaStorageInterface $store storage to sync to
      * @return int number of synced items
      */
-    public function run(array $tags, $since, MediaStorageInterface $store);
+    public function run($tag, $since, MediaStorageInterface $store);
 
 }

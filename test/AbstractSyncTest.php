@@ -36,13 +36,13 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider queryProvider
-     * @param string[] $tags
+     * @param string $tag
      * @param int $since timestamp
      */
-    public function testSync($tags, $since) {
+    public function testSync($tag, $since) {
 
         $store = new ArrayMediaStorage();
-        $this->sync->run($tags, $since, $store);
+        $this->sync->run($tag, $since, $store);
 
         $q = new MediaStorageQuery();
         $items = $store->query($q);
@@ -53,12 +53,7 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
         foreach ( $items as $item ) {
             $t = array_map('strtolower', $item->tags);
 
-            $occurences = 0;
-            foreach ( $tags as $expectedTag ) {
-                $occurences += (int) in_array($expectedTag, $t);
-            }
-
-            $this->assertTrue($occurences !== 0);
+            $this->assertTrue(in_array($tag, $t));
             $this->assertTrue($item->createdAt >= $since);
         }
     }
