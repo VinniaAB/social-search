@@ -11,10 +11,6 @@ namespace Vinnia\SocialTools;
 
 class Media {
 
-    const TYPE_TEXT = 0;
-    const TYPE_IMAGE = 1;
-    const TYPE_VIDEO = 2;
-
     const SOURCE_INSTAGRAM = 0;
     const SOURCE_TWITTER = 1;
     const SOURCE_FACEBOOK = 2;
@@ -23,27 +19,55 @@ class Media {
     /**
      * @var int
      */
-    private $source;
+    public $id;
 
     /**
      * @var int
      */
-    private $type;
+    private $source;
+
+    /**
+     * The original id of this item from the source
+     * @var string
+     */
+    public $originalId;
 
     /**
      * @var string
      */
-    public $data;
+    public $text;
 
     /**
-     * @var string
+     * Array of image urls
+     * @var string[]
      */
-    public $caption;
+    public $images = [];
+
+    /**
+     * Array of video urls
+     * @var string[]
+     */
+    public $videos = [];
 
     /**
      * @var string
      */
     public $username;
+
+    /**
+     * @var float
+     */
+    public $lat;
+
+    /**
+     * @var float
+     */
+    public $long;
+
+    /**
+     * @var string[]
+     */
+    public $tags = [];
 
     /**
      * @var int
@@ -52,30 +76,17 @@ class Media {
 
     /**
      * @param int $source
-     * @param int $type
      */
-    function __construct($source, $type) {
-        if ( !self::isSourceValid($source) || !self::isTypeValid($type) ) {
+    function __construct($source) {
+        if ( !self::isSourceValid($source) ) {
             throw new \InvalidArgumentException('Invalid source or type');
         }
 
         $this->source = $source;
-        $this->type = $type;
     }
 
     public function getSource() {
         return $this->source;
-    }
-
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getValidTypes() {
-        return [self::TYPE_TEXT, self::TYPE_IMAGE, self::TYPE_VIDEO];
     }
 
     /**
@@ -88,14 +99,6 @@ class Media {
             self::SOURCE_FACEBOOK,
             self::SOURCE_PERISCOPE
         ];
-    }
-
-    /**
-     * @param int $type
-     * @return bool
-     */
-    public static function isTypeValid($type) {
-        return in_array($type, self::getValidTypes(), $strict = true);
     }
 
     /**
