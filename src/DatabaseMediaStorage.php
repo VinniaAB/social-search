@@ -237,4 +237,25 @@ EOD;
         return $media;
     }
 
+    public function createTables() {
+        $sql = file_get_contents(__DIR__ . '/../schema.sql');
+        $parts = explode(';', $sql);
+
+        foreach ( $parts as $part ) {
+            $this->db->execute($part);
+        }
+    }
+
+    public function dropTables() {
+        $sql = <<<EOD
+drop table vss_tag;
+drop table vss_media;
+EOD;
+        $parts = explode(';', $sql);
+        foreach ( $parts as $part ) {
+            $this->db->execute($part);
+        }
+
+    }
+
 }
