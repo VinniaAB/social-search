@@ -95,11 +95,11 @@ class DatabaseMediaStorage implements MediaStorageInterface {
 insert into vss_media(
   source,
   original_id,
-  text,
+  `text`,
   images,
   videos,
   lat,
-  long,
+  `long`,
   username,
   created_at,
   url
