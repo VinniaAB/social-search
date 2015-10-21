@@ -60,6 +60,7 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $m->username = 'helmut';
         $m->createdAt = 100;
         $m->tags = ['swag', 'yolo'];
+        $m->url = 'url';
 
         $this->item = $m;
     }
@@ -83,6 +84,7 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->item->username, $m1->username);
         $this->assertEquals($this->item->createdAt, $m1->createdAt);
         $this->assertEquals($this->item->tags, $m1->tags);
+        $this->assertEquals($this->item->url, $m1->url);
     }
 
     public function testInsertAlreadyExisting() {
@@ -113,18 +115,21 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $m->username = 'Helmut';
         $m->originalId = '123';
         $m->createdAt = 100;
+        $m->url = 'url';
 
         $m2 = new Media(Media::SOURCE_TWITTER);
         $m2->tags = ['car', 'horse'];
         $m2->username = 'Helmut';
         $m2->originalId = '456';
         $m2->createdAt = 150;
+        $m2->url = 'url';
 
         $m3 = new Media(Media::SOURCE_TWITTER);
         $m3->tags = ['car', 'bike'];
         $m3->username = 'Helmut';
         $m3->originalId = '600';
         $m3->createdAt = 200;
+        $m3->url = 'url';
 
         $this->store->insert([$m, $m2, $m3]);
 

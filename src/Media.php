@@ -75,6 +75,12 @@ class Media {
     public $createdAt;
 
     /**
+     * Url to the original post
+     * @var string
+     */
+    public $url;
+
+    /**
      * @param int $source
      */
     function __construct($source) {

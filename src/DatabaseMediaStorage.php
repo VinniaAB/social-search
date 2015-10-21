@@ -48,6 +48,7 @@ class DatabaseMediaStorage implements MediaStorageInterface {
         $media->long = $mediaRow['long'] ? (float) $mediaRow['long'] : null;
         $media->username = $mediaRow['username'];
         $media->createdAt = (int) $mediaRow['created_at'];
+        $media->url = $mediaRow['url'];
 
         return $media;
     }
@@ -100,7 +101,8 @@ insert into vss_media(
   lat,
   long,
   username,
-  created_at
+  created_at,
+  url
 ) values (
   :source,
   :originalId,
@@ -110,7 +112,8 @@ insert into vss_media(
   :lat,
   :long,
   :username,
-  :createdAt
+  :createdAt,
+  :url
 )
 EOD;
 
@@ -138,7 +141,8 @@ EOD;
                     ':lat' => $it->lat,
                     ':long' => $it->long,
                     ':username' => $it->username,
-                    ':createdAt' => $it->createdAt
+                    ':createdAt' => $it->createdAt,
+                    ':url' => $it->url
                 ]);
 
                 $maxId = $this->getLastId();

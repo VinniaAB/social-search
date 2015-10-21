@@ -30,6 +30,7 @@ class TwitterSync implements MediaSyncInterface {
         $media->text = $tweet->text;
         $media->username = $tweet->user->screen_name;
         $media->createdAt = strtotime($tweet->created_at);
+        $media->url = "http://twitter.com/{$media->username}/statuses/{$media->originalId}";
 
         if ( isset($tweet->entities->hashtags) && $tweet->entities->hashtags ) {
             $hashTags = $tweet->entities->hashtags;
