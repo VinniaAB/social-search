@@ -242,7 +242,10 @@ EOD;
         $parts = explode(';', $sql);
 
         foreach ( $parts as $part ) {
-            $this->db->execute($part);
+            $part = trim($part);
+            if ( !empty($part) ) {
+                $this->db->execute($part);
+            }
         }
     }
 
@@ -253,7 +256,10 @@ drop table vss_media;
 EOD;
         $parts = explode(';', $sql);
         foreach ( $parts as $part ) {
-            $this->db->execute($part);
+            $part = trim($part);
+            if ( !empty($part) ) {
+                $this->db->execute($part);
+            }
         }
 
     }
