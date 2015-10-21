@@ -49,6 +49,7 @@ class DatabaseMediaStorage implements MediaStorageInterface {
         $media->username = $mediaRow['username'];
         $media->createdAt = (int) $mediaRow['created_at'];
         $media->url = $mediaRow['url'];
+        $media->active = (bool) $mediaRow['active'];
 
         return $media;
     }
@@ -102,7 +103,8 @@ insert into vss_media(
   `long`,
   username,
   created_at,
-  url
+  url,
+  active
 ) values (
   :source,
   :originalId,
@@ -113,7 +115,8 @@ insert into vss_media(
   :long,
   :username,
   :createdAt,
-  :url
+  :url,
+  :active
 )
 EOD;
 
@@ -142,7 +145,8 @@ EOD;
                     ':long' => $it->long,
                     ':username' => $it->username,
                     ':createdAt' => $it->createdAt,
-                    ':url' => $it->url
+                    ':url' => $it->url,
+                    ':active' => (int) $it->active
                 ]);
 
                 $maxId = $this->getLastId();
@@ -168,7 +172,7 @@ EOD;
      * @return Media[]
      */
     public function query(MediaStorageQuery $query) {
-        $where = [];
+        $where = ['vm.active = 1'];
         $join = [];
         $paramValues = [];
         if ( $query->since ) {

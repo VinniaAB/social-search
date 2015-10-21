@@ -81,6 +81,11 @@ class Media {
     public $url;
 
     /**
+     * @var bool
+     */
+    public $active = true;
+
+    /**
      * @param int $source
      */
     function __construct($source) {

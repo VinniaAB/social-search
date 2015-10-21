@@ -9,7 +9,8 @@ CREATE TABLE `vss_media` (
   `long` float,
   `username` varchar(100) not null,
   `created_at` int(11) NOT NULL,
-  `url` text not null
+  `url` text not null,
+  `active` tinyint not null default 1
 );
 
 create unique index vss_media_source_original_id_idx on `vss_media`(`source`, `original_id`);
