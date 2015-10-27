@@ -71,7 +71,7 @@ class TwitterSync implements MediaSyncInterface {
      */
     public function run($tag, $since, MediaStorageInterface $store) {
         $query = [
-            'q' => '#' . $tag . ' since:' . date('Y-m-d', $since),
+            'q' => '#' . $tag . ' since:' . date('Y-m-d', $since) . ' -filter:retweets',
             'count' => 100
         ];
 
