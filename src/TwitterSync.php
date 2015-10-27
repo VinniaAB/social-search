@@ -86,7 +86,13 @@ class TwitterSync implements MediaSyncInterface {
             $data = $this->client->searchTweets($query);
             $medias = array_map([$this, 'toMedia'], $data->statuses);
             $medias = array_filter($medias, function($it) use ($since) { return $it->createdAt > $since; });
-            $nextMin = $data->search_metadata->max_id;
+            $n = $data->search_metadata->max_id;
+
+            if ( $n === $nextMin ) {
+                break;
+            }
+
+            $nextMin = $n;
             $store->insert($medias);
             $qty += count($medias);
 
