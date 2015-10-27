@@ -12,7 +12,7 @@ namespace Vinnia\SocialTools\Test;
 use Vinnia\SocialTools\DatabaseMediaStorage;
 use Vinnia\SocialTools\Media;
 use Vinnia\SocialTools\MediaStorageQuery;
-use Vinnia\SocialTools\PDODatabase;
+use Vinnia\DbTools\PDODatabase;
 use PDO;
 
 class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
@@ -38,13 +38,8 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $dsn = $_ENV['DB_DSN'];
         $user = $_ENV['DB_USERNAME'];
         $pwd = $_ENV['DB_PASSWORD'];
-        $pdo = new PDO($dsn, $user, $pwd, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ]);
 
-        $this->db = new PDODatabase($pdo);
+        $this->db = PDODatabase::build($dsn, $user, $pwd);
 
         $this->db->execute('delete from vss_media');
 

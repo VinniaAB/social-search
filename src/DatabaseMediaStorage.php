@@ -8,6 +8,8 @@
 
 namespace Vinnia\SocialTools;
 
+use Vinnia\DbTools\DatabaseInterface;
+use Vinnia\DbTools\DbHelper;
 
 class DatabaseMediaStorage implements MediaStorageInterface {
 
@@ -17,10 +19,16 @@ class DatabaseMediaStorage implements MediaStorageInterface {
     private $db;
 
     /**
+     * @var DbHelper
+     */
+    private $helper;
+
+    /**
      * @param DatabaseInterface $db
      */
     function __construct(DatabaseInterface $db) {
         $this->db = $db;
+        $this->helper = new DbHelper($db);
     }
 
     /**
@@ -91,70 +99,31 @@ class DatabaseMediaStorage implements MediaStorageInterface {
      * @return int number of saved medias
      */
     public function insert(array $media) {
-
-        $sql = <<<EOD
-insert into vss_media(
-  source,
-  original_id,
-  `text`,
-  images,
-  videos,
-  lat,
-  `long`,
-  username,
-  created_at,
-  url,
-  active
-) values (
-  :source,
-  :originalId,
-  :text,
-  :images,
-  :videos,
-  :lat,
-  :long,
-  :username,
-  :createdAt,
-  :url,
-  :active
-)
-EOD;
-
-        $tagSql = <<<EOD
-insert into vss_tag(
-    name,
-    vss_media_id
-) values (
-    :name,
-    :id
-)
-EOD;
-
-
         $inserts = 0;
         foreach ( $media as $it ) {
 
             try {
-                $this->db->execute($sql, [
-                    ':source' => $it->getSource(),
-                    ':originalId' => $it->originalId,
-                    ':text' => $it->text,
-                    ':images' => json_encode($it->images),
-                    ':videos' => json_encode($it->videos),
-                    ':lat' => $it->lat,
-                    ':long' => $it->long,
-                    ':username' => $it->username,
-                    ':createdAt' => $it->createdAt,
-                    ':url' => $it->url,
-                    ':active' => (int) $it->active
+
+                $this->helper->insert('vss_media', [
+                    'source' => $it->getSource(),
+                    'original_id' => $it->originalId,
+                    'text' => $it->text,
+                    'images' => json_encode($it->images),
+                    'videos' => json_encode($it->videos),
+                    'lat' => $it->lat,
+                    'long' => $it->long,
+                    'username' => $it->username,
+                    'created_at' => $it->createdAt,
+                    'url' => $it->url,
+                    'active' => (int) $it->active
                 ]);
 
                 $maxId = $this->getLastId();
 
                 foreach ( $it->tags as $tag ) {
-                    $this->db->execute($tagSql, [
-                        ':name' => $tag,
-                        ':id' => $maxId
+                    $this->helper->insert('vss_tag', [
+                        'name' => $tag,
+                        'vss_media_id' => $maxId
                     ]);
                 }
 
