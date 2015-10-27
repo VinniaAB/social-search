@@ -187,7 +187,7 @@ inner join (
     group by vm.vss_media_id
 ) t1
 on t1.vss_media_id = vm.vss_media_id
-order by vm.created_at asc
+order by vm.created_at desc
 EOD;
 
         $data = $this->db->queryAll($sql, $paramValues);
