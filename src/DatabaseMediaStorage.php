@@ -149,6 +149,11 @@ class DatabaseMediaStorage implements MediaStorageInterface {
             $paramValues[':since'] = $query->since;
         }
 
+        if ( $query->until ) {
+            $where[] = 'vm.created_at < :until';
+            $paramValues[':until'] = $query->until;
+        }
+
         if ( count($query->tags) !== 0 ) {
 
             $i = 0;
@@ -189,6 +194,11 @@ inner join (
 on t1.vss_media_id = vm.vss_media_id
 order by vm.created_at desc
 EOD;
+
+        if ( $query->count ) {
+            $sql .= ' limit :count';
+            $paramValues[':count'] = $query->count;
+        }
 
         $data = $this->db->queryAll($sql, $paramValues);
 

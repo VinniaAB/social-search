@@ -17,9 +17,19 @@ class MediaStorageQuery {
     public $tags = [];
 
     /**
-     * @var int unix timestamp
+     * @var int unix timestamp. Results will have a created_at value larger than this.
      */
     public $since;
+
+    /**
+     * @var int unix timestamp. Results will have a created_at value less than this.
+     */
+    public $until;
+
+    /**
+     * @var int maximum count
+     */
+    public $count;
 
     function __construct(array $params = []) {
         foreach ( $params as $key => $value ) {

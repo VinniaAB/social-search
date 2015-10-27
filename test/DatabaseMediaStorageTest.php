@@ -91,11 +91,16 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
 
     public function queryProvider() {
         return [
-            [new MediaStorageQuery(), ['123', '456', '600']],
+            [new MediaStorageQuery(), ['600', '456', '123']],
             [new MediaStorageQuery(['tags' => ['boat']]), ['123']],
             [new MediaStorageQuery(['tags' => ['boat'], 'since' => 150]), []],
-            [new MediaStorageQuery(['tags' => ['car'], 'since' => 149]), ['456', '600']],
-            [new MediaStorageQuery(['tags' => ['horse', 'bike']]), ['456', '600']],
+            [new MediaStorageQuery(['tags' => ['car'], 'since' => 149]), ['600', '456']],
+            [new MediaStorageQuery(['tags' => ['horse', 'bike']]), ['600', '456']],
+            [new MediaStorageQuery(['until' => 170]), ['456', '123']],
+            [new MediaStorageQuery(['until' => 170, 'count' => 1]), ['456']],
+            [new MediaStorageQuery(['until' => 170, 'since' => 130]), ['456']],
+            [new MediaStorageQuery(['until' => 170, 'since' => 99]), ['456', '123']],
+            [new MediaStorageQuery(['until' => 170, 'since' => 99, 'count' => 1]), ['456']],
         ];
     }
 
@@ -129,6 +134,8 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $this->store->insert([$m, $m2, $m3]);
 
         $res = $this->store->query($query);
+
+        var_dump($res);
 
         $len = count($expectedIds);
         $this->assertCount($len, $res);
