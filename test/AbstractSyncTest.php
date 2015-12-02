@@ -8,6 +8,8 @@
 
 namespace Vinnia\SocialTools\Test;
 
+use Vinnia\DbTools\PDODatabase;
+use Vinnia\SocialTools\DatabaseMediaStorage;
 use Vinnia\SocialTools\MediaStorageQuery;
 use Vinnia\SocialTools\MediaSyncInterface;
 
@@ -41,7 +43,14 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
      */
     public function testSync($tag, $since) {
 
-        $store = new ArrayMediaStorage();
+        $dsn = $_ENV['DB_DSN'];
+        $user = $_ENV['DB_USERNAME'];
+        $pwd = $_ENV['DB_PASSWORD'];
+
+        $db = PDODatabase::build($dsn, $user, $pwd);
+        $db->execute('delete from vss_media');
+        $store = new DatabaseMediaStorage($db);
+
         $this->sync->run($tag, $since, $store);
 
         $q = new MediaStorageQuery([
