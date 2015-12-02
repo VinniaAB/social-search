@@ -44,7 +44,9 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
         $store = new ArrayMediaStorage();
         $this->sync->run($tag, $since, $store);
 
-        $q = new MediaStorageQuery();
+        $q = new MediaStorageQuery([
+            'tags' => [$tag]
+        ]);
         $items = $store->query($q);
 
         // this might fail if the query is too strict.

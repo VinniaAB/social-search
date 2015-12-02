@@ -17,7 +17,7 @@ class ArrayMediaStorage implements MediaStorageInterface {
     /**
      * @var Media[]
      */
-    private $cache = [];
+    public $cache = [];
 
     /**
      * @param Media[] $media
@@ -34,7 +34,23 @@ class ArrayMediaStorage implements MediaStorageInterface {
      * @return Media[]
      */
     public function query(MediaStorageQuery $query) {
-        return $this->cache;
+
+        // filter tags
+        $cache = array_filter($this->cache, function(Media $item) use ($query) {
+            return count($query->tags) === 0 || count(array_intersect($item->tags, $query->tags)) !== 0;
+        });
+
+        // filter since
+        $cache = array_filter($cache, function(Media $item) use ($query) {
+            return !$query->since || $item->createdAt >= $query->since;
+        });
+
+        // filter until
+        $cache = array_filter($cache, function(Media $item) use ($query) {
+            return !$query->until || $item->createdAt <= $query->until;
+        });
+
+        return $cache;
     }
 
 }
