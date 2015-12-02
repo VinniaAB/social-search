@@ -83,6 +83,12 @@ class InstagramSync implements MediaSyncInterface {
             }
 
             $data = $this->client->tagsMediaRecent($tag, $query);
+
+            // if there are less than a full page of grams, instagram skips this pagination property.
+            if ( !isset($data->pagination->next_max_tag_id) ) {
+                break;
+            }
+
             $n = $data->pagination->next_max_tag_id;
 
             // prevent an infinite loop if we have reached the first gram
