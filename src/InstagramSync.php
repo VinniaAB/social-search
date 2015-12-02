@@ -73,30 +73,10 @@ class InstagramSync implements MediaSyncInterface {
             'count' => 100
         ];
         $earliestTimestamp = time();
-        $nextMaxTagId = null;
+        $prevNextMaxTaxId = null;
         $qty = 0;
         do {
-
-            // we're not on the first iteration - use pagination in the api and fetch earlier grams
-            if ( $nextMaxTagId !== null ) {
-                $query['max_tag_id'] = $nextMaxTagId;
-            }
-
             $data = $this->client->tagsMediaRecent($tag, $query);
-
-            // if there are less than a full page of grams, instagram skips this pagination property.
-            if ( !isset($data->pagination->next_max_tag_id) ) {
-                break;
-            }
-
-            $n = $data->pagination->next_max_tag_id;
-
-            // prevent an infinite loop if we have reached the first gram
-            if ( $n === $nextMaxTagId ) {
-                break;
-            }
-
-            $nextMaxTagId = $n;
             $media = array_map([$this, 'toMedia'], $data->data);
 
             // find the smallest timestamp
@@ -108,8 +88,23 @@ class InstagramSync implements MediaSyncInterface {
             $media = array_filter($media, function($it) use ($since) { return $it->createdAt > $since; });
 
             $store->insert($media);
-
             $qty += count($media);
+
+            // if there is less than a full page of grams, instagram skips this pagination property.
+            if ( !isset($data->pagination->next_max_tag_id) ) {
+                break;
+            }
+
+            $n = $data->pagination->next_max_tag_id;
+
+            // prevent an infinite loop if we have reached the first gram
+            if ( $n === $prevNextMaxTaxId ) {
+                break;
+            }
+
+            // save max_tag_id for the next iteration
+            $query['max_tag_id'] = $n;
+            $prevNextMaxTaxId = $n;
 
         } while ( $earliestTimestamp > $since );
 
