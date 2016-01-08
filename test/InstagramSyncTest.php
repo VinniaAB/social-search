@@ -20,7 +20,7 @@ class InstagramSyncTest extends AbstractSyncTest {
      */
     public function getMediaSyncObject() {
         $guzzle = new Client();
-        $instagramClient = new InstagramClient($guzzle, $_ENV['INSTAGRAM_CLIENT_ID']);
+        $instagramClient = new InstagramClient($guzzle, $_ENV['INSTAGRAM_ACCESS_TOKEN']);
         return new InstagramSync($instagramClient);
     }
 

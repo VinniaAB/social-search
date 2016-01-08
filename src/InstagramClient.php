@@ -22,15 +22,15 @@ class InstagramClient {
     /**
      * @var string
      */
-    private $clientId;
+    private $accessToken;
 
     /**
      * @param ClientInterface $httpClient
-     * @param string $clientId Instagram app client id
+     * @param string $accessToken instagram access token
      */
-    function __construct(ClientInterface $httpClient, $clientId) {
+    function __construct(ClientInterface $httpClient, $accessToken) {
         $this->httpClient = $httpClient;
-        $this->clientId = $clientId;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -72,7 +72,11 @@ class InstagramClient {
      * @return \stdClass
      */
     protected function sendRequest($method, $endpoint, array $options = []) {
-        $opts = array_merge_recursive(['query' => ['client_id' => $this->clientId]], $options);
+        $opts = array_merge($options, [
+            'query' => [
+                'access_token' => $this->accessToken,
+            ],
+        ]);
         $res = $this->httpClient->request($method, self::API_URL . $endpoint, $opts);
         return json_decode((string) $res->getBody());
     }
