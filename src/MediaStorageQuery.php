@@ -31,6 +31,11 @@ class MediaStorageQuery {
      */
     public $count;
 
+    /**
+     * @var string[]
+     */
+    public $usernames = [];
+
     function __construct(array $params = []) {
         foreach ( $params as $key => $value ) {
             $this->{$key} = $value;

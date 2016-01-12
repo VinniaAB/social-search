@@ -174,6 +174,22 @@ and vt.name in ($paramString)
 EOD;
         }
 
+        if ( count($query->usernames) !== 0 ) {
+
+            $i = 0;
+            $params = [];
+            foreach ( $query->usernames as $username ) {
+                $key = ':qpp' . $i;
+                $params[] = $key;
+                $paramValues[$key] = $username;
+                $i++;
+            }
+
+            $paramString = implode(',', $params);
+
+            $where[] = "vm.username in ($paramString)";
+        }
+
         $joins = implode(' ', $join);
         $wheres = implode(' and ', $where);
 

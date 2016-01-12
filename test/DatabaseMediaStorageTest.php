@@ -101,6 +101,8 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
             [new MediaStorageQuery(['until' => 170, 'since' => 130]), ['456']],
             [new MediaStorageQuery(['until' => 170, 'since' => 99]), ['456', '123']],
             [new MediaStorageQuery(['until' => 170, 'since' => 99, 'count' => 1]), ['456']],
+            [new MediaStorageQuery(['usernames' => ['kunkka', 'omniknight']]), ['456', '123']],
+            [new MediaStorageQuery(['usernames' => ['zeus']]), ['600']],
         ];
     }
 
@@ -112,21 +114,21 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
     public function testQuery(MediaStorageQuery $query, array $expectedIds) {
         $m = new Media(Media::SOURCE_INSTAGRAM);
         $m->tags = ['car', 'boat'];
-        $m->username = 'Helmut';
+        $m->username = 'kunkka';
         $m->originalId = '123';
         $m->createdAt = 100;
         $m->url = 'url';
 
         $m2 = new Media(Media::SOURCE_TWITTER);
         $m2->tags = ['car', 'horse'];
-        $m2->username = 'Helmut';
+        $m2->username = 'omniknight';
         $m2->originalId = '456';
         $m2->createdAt = 150;
         $m2->url = 'url';
 
         $m3 = new Media(Media::SOURCE_TWITTER);
         $m3->tags = ['car', 'bike'];
-        $m3->username = 'Helmut';
+        $m3->username = 'zeus';
         $m3->originalId = '600';
         $m3->createdAt = 200;
         $m3->url = 'url';
@@ -134,8 +136,6 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $this->store->insert([$m, $m2, $m3]);
 
         $res = $this->store->query($query);
-
-        var_dump($res);
 
         $len = count($expectedIds);
         $this->assertCount($len, $res);
