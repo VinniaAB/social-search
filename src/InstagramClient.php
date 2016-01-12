@@ -45,12 +45,12 @@ class InstagramClient {
     }
 
     /**
-     * @param string $id
+     * @param string $id user id. note that this is not the username.
      * @param string[] $params
      * @return \stdClass
      */
     public function usersMediaRecent($id, array $params = []) {
-        return $this->sendRequest('GET', "/users/{$id}/media/recent", [
+        return $this->sendRequest('GET', "/users/{$id}/media/recent/", [
             'query' => $params
         ]);
     }
@@ -72,12 +72,13 @@ class InstagramClient {
      * @return \stdClass
      */
     protected function sendRequest($method, $endpoint, array $options = []) {
-        $opts = array_merge($options, [
+        $opts = array_merge_recursive($options, [
             'query' => [
                 'access_token' => $this->accessToken,
             ],
         ]);
         $res = $this->httpClient->request($method, self::API_URL . $endpoint, $opts);
+
         return json_decode((string) $res->getBody());
     }
 
