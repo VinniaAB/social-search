@@ -64,17 +64,12 @@ class TwitterSync implements MediaSyncInterface {
     }
 
     /**
-     * @param string $tag tag to sync, not prefixed with #. ex: ['cars', 'boats']
-     * @param int $since unix timestamp to start from
-     * @param MediaStorageInterface $store storage to sync to
-     * @return int number of synced items
+     * @param string[] $query
+     * @param int $since
+     * @param int $store
+     * @return int
      */
-    public function run($tag, $since, MediaStorageInterface $store) {
-        $query = [
-            'q' => '#' . $tag . ' since:' . date('Y-m-d', $since) . ' -filter:retweets',
-            'count' => 100
-        ];
-
+    public function runInternal(array $query, $since, $store) {
         $nextMin = null;
         $qty = 0;
         do {
@@ -99,5 +94,35 @@ class TwitterSync implements MediaSyncInterface {
         } while ( count($medias) !== 0 );
 
         return $qty;
+    }
+
+    /**
+     * @param string $tag tag to sync, not prefixed with #. ex: ['cars', 'boats']
+     * @param int $since unix timestamp to start from
+     * @param MediaStorageInterface $store storage to sync to
+     * @return int number of synced items
+     */
+    public function runWithTag($tag, $since, MediaStorageInterface $store) {
+        $query = [
+            'q' => '#' . $tag . ' since:' . date('Y-m-d', $since) . ' -filter:retweets',
+            'count' => 100
+        ];
+
+        return $this->runInternal($query, $since, $store);
+    }
+
+    /**
+     * @param string $username username to sync
+     * @param int $since unix timestamp to start from
+     * @param MediaStorageInterface $store
+     * @return int number of synced items
+     */
+    public function runWithUsername($username, $since, MediaStorageInterface $store) {
+        $query = [
+            'q' => 'from:' . $username . ' since:' . date('Y-m-d', $since) . ' -filter:retweets',
+            'count' => 100
+        ];
+
+        return $this->runInternal($query, $since, $store);
     }
 }

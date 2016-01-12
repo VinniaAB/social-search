@@ -17,6 +17,14 @@ interface MediaSyncInterface {
      * @param MediaStorageInterface $store storage to sync to
      * @return int number of synced items
      */
-    public function run($tag, $since, MediaStorageInterface $store);
+    public function runWithTag($tag, $since, MediaStorageInterface $store);
+
+    /**
+     * @param string $username username to sync
+     * @param int $since unix timestamp to start from
+     * @param MediaStorageInterface $store
+     * @return int number of synced items
+     */
+    public function runWithUsername($username, $since, MediaStorageInterface $store);
 
 }

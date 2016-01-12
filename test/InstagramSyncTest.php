@@ -27,9 +27,18 @@ class InstagramSyncTest extends AbstractSyncTest {
     /**
      * @return string[][]
      */
-    public function queryProvider() {
+    public function tagProvider() {
         return [
             ['schwarzenegger', strtotime('yesterday 12:00:00')]
+        ];
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function usernameProvider() {
+        return [
+            ['joakimcarlsten', strtotime('2015-12-01 12:00:00')],
         ];
     }
 }

@@ -59,16 +59,12 @@ class InstagramSync implements MediaSyncInterface {
     }
 
     /**
-     * Instagarm does not have a combination of timestamp/tag endpoint. Instead we use their
-     * tag endpoint from the current timestamp and loop backwards until we reach a timestamp
-     * that is earlier than the $since parameter.
-     *
-     * @param string $tag tag to sync
-     * @param int $since unix timestamp to start from
-     * @param MediaStorageInterface $store storage to sync to
-     * @return int number of synced items
+     * @param \Closure $getData closure that should return the items
+     * @param $since
+     * @param MediaStorageInterface $store
+     * @return int
      */
-    public function run($tag, $since, MediaStorageInterface $store) {
+    public function runInternal(\Closure $getData, $since, MediaStorageInterface $store) {
         $query = [
             'count' => 100
         ];
@@ -76,7 +72,7 @@ class InstagramSync implements MediaSyncInterface {
         $prevNextMaxTaxId = null;
         $qty = 0;
         do {
-            $data = $this->client->tagsMediaRecent($tag, $query);
+            $data = $getData($this->client, $query);
             $media = array_map([$this, 'toMedia'], $data->data);
 
             // find the smallest timestamp
@@ -109,5 +105,48 @@ class InstagramSync implements MediaSyncInterface {
         } while ( $earliestTimestamp > $since );
 
         return $qty;
+    }
+
+    /**
+     * Instagarm does not have a combination of timestamp/tag endpoint. Instead we use their
+     * tag endpoint from the current timestamp and loop backwards until we reach a timestamp
+     * that is earlier than the $since parameter.
+     *
+     * @param string $tag tag to sync
+     * @param int $since unix timestamp to start from
+     * @param MediaStorageInterface $store storage to sync to
+     * @return int number of synced items
+     */
+    public function runWithTag($tag, $since, MediaStorageInterface $store) {
+        $getData = function(InstagramClient $client, array $query) use ($tag) {
+            return $client->tagsMediaRecent($tag, $query);
+        };
+
+        return $this->runInternal($getData, $since, $store);
+    }
+
+    /**
+     * @param string $username username to sync
+     * @param int $since unix timestamp to start from
+     * @param MediaStorageInterface $store
+     * @return int number of synced items
+     */
+    public function runWithUsername($username, $since, MediaStorageInterface $store) {
+        // first we need to get the user id of this username
+        $result = $this->client->usersSearch([
+            'q' => $username,
+        ]);
+
+        if ( empty($result->data) ) {
+            return 0;
+        }
+
+        $id = $result->data[0]->id;
+
+        $getData = function(InstagramClient $client, array $query) use ($id) {
+            return $client->usersMediaRecent($id, $query);
+        };
+
+        return $this->runInternal($getData, $since, $store);
     }
 }

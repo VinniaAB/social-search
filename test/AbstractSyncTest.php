@@ -34,14 +34,19 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
     /**
      * @return string[][]
      */
-    abstract public function queryProvider();
+    abstract public function tagProvider();
 
     /**
-     * @dataProvider queryProvider
+     * @return string[][]
+     */
+    abstract public function usernameProvider();
+
+    /**
+     * @dataProvider tagProvider
      * @param string $tag
      * @param int $since timestamp
      */
-    public function testSync($tag, $since) {
+    public function testSyncWithTag($tag, $since) {
 
         $dsn = $_ENV['DB_DSN'];
         $user = $_ENV['DB_USERNAME'];
@@ -51,7 +56,7 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
         $db->execute('delete from vss_media');
         $store = new DatabaseMediaStorage($db);
 
-        $this->sync->run($tag, $since, $store);
+        $this->sync->runWithTag($tag, $since, $store);
 
         $q = new MediaStorageQuery([
             'tags' => [$tag]
@@ -69,6 +74,34 @@ abstract class AbstractSyncTest extends \PHPUnit_Framework_TestCase {
         }
 
         var_dump(count($items));
+    }
+
+    /**
+     * @dataProvider usernameProvider
+     * @param string $username
+     * @param string $since
+     */
+    public function testSyncWithUsername($username, $since) {
+        $dsn = $_ENV['DB_DSN'];
+        $user = $_ENV['DB_USERNAME'];
+        $pwd = $_ENV['DB_PASSWORD'];
+
+        $db = PDODatabase::build($dsn, $user, $pwd);
+        $db->execute('delete from vss_media');
+        $store = new DatabaseMediaStorage($db);
+
+        $this->sync->runWithUsername($username, $since, $store);
+
+        $q = new MediaStorageQuery();
+
+        $items = $store->query($q);
+
+        $this->assertNotEmpty($items);
+
+        foreach ( $items as $item ) {
+            var_dump($item->text);
+            $this->assertEquals($username, $item->username);
+        }
     }
 
 }

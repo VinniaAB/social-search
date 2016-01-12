@@ -27,10 +27,18 @@ class TwitterSyncTest extends AbstractSyncTest {
     /**
      * @return string[][]
      */
-    public function queryProvider() {
+    public function tagProvider() {
         return [
-            ['schwarzenegger', strtotime('yesterday 12:00:00')]
+            ['schwarzenegger', strtotime('yesterday 12:00:00')],
         ];
     }
 
+    /**
+     * @return string[][]
+     */
+    public function usernameProvider() {
+        return [
+            ['PoppyDrayton', strtotime('2015-06-01 00:00:00')],
+        ];
+    }
 }
