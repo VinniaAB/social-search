@@ -34,6 +34,8 @@ class InstagramSync implements MediaSyncInterface {
         $media->createdAt = (int) $item->created_time;
         $media->tags = $item->tags;
         $media->url = $item->link;
+        $media->like_count = $item->likes->count;
+        $media->comment_count = $item->comments->count;
 
         if ( $item->caption ) {
             $media->text = $item->caption->text;

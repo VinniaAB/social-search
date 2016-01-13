@@ -10,7 +10,9 @@ CREATE TABLE `vss_media` (
   `username` varchar(100) not null,
   `created_at` int(11) NOT NULL,
   `url` text not null,
-  `active` tinyint not null default 1
+  `active` tinyint not null default 1,
+  `like_count` int not null default 0,
+  `comment_count` int not null default 0
 );
 
 create unique index vss_media_source_original_id_idx on `vss_media`(`source`, `original_id`);

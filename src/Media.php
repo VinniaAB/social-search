@@ -86,6 +86,16 @@ class Media {
     public $active = true;
 
     /**
+     * @var int
+     */
+    public $like_count = 0;
+
+    /**
+     * @var int
+     */
+    public $comment_count = 0;
+
+    /**
      * @param int $source
      */
     function __construct($source) {

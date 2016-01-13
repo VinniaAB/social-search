@@ -56,6 +56,8 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $m->createdAt = 100;
         $m->tags = ['swag', 'yolo'];
         $m->url = 'url';
+        $m->like_count = 5;
+        $m->comment_count = 10;
 
         $this->item = $m;
     }
@@ -80,6 +82,8 @@ class DatabaseMediaStorageTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->item->createdAt, $m1->createdAt);
         $this->assertEquals($this->item->tags, $m1->tags);
         $this->assertEquals($this->item->url, $m1->url);
+        $this->assertEquals($this->item->like_count, $m1->like_count);
+        $this->assertEquals($this->item->comment_count, $m1->comment_count);
     }
 
     public function testInsertAlreadyExisting() {

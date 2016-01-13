@@ -58,6 +58,8 @@ class DatabaseMediaStorage implements MediaStorageInterface {
         $media->createdAt = (int) $mediaRow['created_at'];
         $media->url = $mediaRow['url'];
         $media->active = (bool) $mediaRow['active'];
+        $media->like_count = (int) $mediaRow['like_count'];
+        $media->comment_count = (int) $mediaRow['comment_count'];
 
         return $media;
     }
@@ -115,7 +117,9 @@ class DatabaseMediaStorage implements MediaStorageInterface {
                     'username' => $it->username,
                     'created_at' => $it->createdAt,
                     'url' => $it->url,
-                    'active' => (int) $it->active
+                    'active' => (int) $it->active,
+                    'like_count' => $it->like_count,
+                    'comment_count' => $it->comment_count,
                 ]);
 
                 $maxId = $this->getLastId();
@@ -129,7 +133,9 @@ class DatabaseMediaStorage implements MediaStorageInterface {
 
                 $inserts++;
             }
-            catch ( \Exception $e ) {}
+            catch ( \Exception $e ) {
+                error_log($e->getMessage());
+            }
 
         }
 
